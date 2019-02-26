@@ -1,38 +1,48 @@
 import React from 'react';
-import { StyleSheet,Text,  View} from 'react-native';
-import PlaceInput from './components/PlaceInput';
-import PlaceList from './components/PlaceList';
+import { View } from 'react-native';
+import firebase from 'firebase';
+import { Header, Button, Spinner, CardSection } from './src/components/common';
+import LogInForm from './src/components/LogInForm';
 
-export default class App extends React.Component {
-  state = {
-    places: []
+class App extends React.Component {
+    state={ loggedIn: null};
+  componentWillMount(){
+    firebase.initializeApp({
+    apiKey: "AIzaSyADQL-A1mtaT-vYipdIUCnmg2lNzo0TORc",
+    authDomain: "authentication-c35a8.firebaseapp.com",
+    databaseURL: "https://authentication-c35a8.firebaseio.com",
+    projectId: "authentication-c35a8",
+    storageBucket: "authentication-c35a8.appspot.com",
+    messagingSenderId: "1035822666848"
+    });
+    firebase.auth().onAuthStateChanged((user)=> {
+        if(user){
+            this.setState({loggedIn: true})
+        }
+        else {
+            this.setState({loggedIn: false})
+        }
+    });
   }
-  placeAddedHandler = (placeName) => {
-    this.setState(()=>{
-      return {
-        places: [...this.state.places, placeName]
+  renderContent = () => {
+      switch (this.state.loggedIn) {
+          case true :
+          return <CardSection><Button onPress = {()=> firebase.auth().signOut()}>Log Out</Button></CardSection>
+          case false:
+          return <LogInForm/>
+          default: 
+          return <Spinner size = "large"/>
       }
-    })
   }
-	render() {
-    
-		return (
-			<View style={styles.container}>
-				<PlaceInput onPlaceAdded = {this.placeAddedHandler}/>
-				<Text>List of Cities</Text>
-        <PlaceList places = {this.state.places}/>
-			</View>
-		);
-	}
+  render() {
+    return (
+      <View>
+      <Header headerText = "Authentication" />
+        
+        {this.renderContent()}
+        
+      </View>
+    );
+  }
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		padding: 40,
-		justifyContent: 'flex-start',
-	},
-  
-});
+export default App
