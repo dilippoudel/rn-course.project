@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rn-course",
-    "slug": "rn-course",
+    "name": "stack",
+    "slug": "stack",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
