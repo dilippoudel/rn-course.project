@@ -4,6 +4,8 @@ import { Card, Input, Button, CardSection, Spinner } from './commons';
 import {connect} from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions/index';
 class LoginForm extends Component {
+    //static navigationOptions = { title: 'LogIn Form'};
+
     onEmailChange(text){
         this.props.emailChanged(text);
     }
